@@ -1,11 +1,10 @@
-#include "mainwindow.h"
-
-#include <QApplication>
+#include "./mainwindow/mainwindow.h"
+#include "./app/application.h"
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
-	return a.exec();
+	dia::Application app(argc, argv);
+	dia::MainWindow  win;
+	win.show();
+	return app.exec();
 }
