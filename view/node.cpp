@@ -7,11 +7,11 @@
 namespace dia {
 
 Node::Node()
-	: _textColor(Qt::darkGreen)
-	, _backgroundColor(Qt::white)
-	, _outlineColor(Qt::darkBlue)
+    : _textColor(Qt::darkGreen)
+    , _backgroundColor(Qt::white)
+    , _outlineColor(Qt::darkBlue)
 {
-	setFlags(ItemIsMovable | ItemIsSelectable);
+    setFlags(ItemIsMovable | ItemIsSelectable);
 }
 
 Node::~Node()
@@ -19,70 +19,71 @@ Node::~Node()
 //	foreach(Link* link, _pLinks) {
 //		delete link;
 //	}
-	for (Link* link: _pLinks) {
-		delete link;
-	}
-	_pLinks.clear();
+    for (Link* link: _pLinks) {
+        delete link;
+    }
+    _pLinks.clear();
 }
 
 void Node::setText(const QString& text)
 {
-	prepareGeometryChange();
-	_text = text;
-	update();
+    prepareGeometryChange();
+    _text = text;
+    update();
 }
 
 QString Node::text() const
 {
-	return _text;
+    return _text;
 }
 
 void Node::setTextColor(const QColor& color)
 {
-	_textColor = color;
-	update();
+    _textColor = color;
+    update();
 }
 
 QColor Node::textColor() const
 {
-	return _textColor;
+    return _textColor;
 }
 
 void Node::setOutlineColor(const QColor& color)
 {
-	_outlineColor = color;
-	update();
+    _outlineColor = color;
+    update();
 }
 
 QColor Node::outlineColor() const
 {
-	return _outlineColor;
+    return _outlineColor;
 }
 
 void Node::setBackgroundColor(const QColor color)
 {
-	_backgroundColor = color;
-	update();
+    _backgroundColor = color;
+    update();
 }
 
 QColor Node::backgroundColor() const
 {
-	return _backgroundColor;
+    return _backgroundColor;
 }
 
 void Node::addLink(Link* link)
 {
-	_pLinks.insert(link);
+    _pLinks.insert(link);
 }
 
 void Node::removeLink(Link* link)
 {
-	_pLinks.remove(link);
+    _pLinks.remove(link);
 }
 
 QRectF Node::boundingRect() const
 {
-
+    constexpr int MARGIN = 1;
+    return outlineRect().adjusted(-MARGIN, -MARGIN, MARGIN, MARGIN);
 }
 
 QPainterPath Node::shape() const
@@ -107,13 +108,13 @@ QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange changed, const QVari
 
 QRectF Node::outlineRect() const
 {
-	constexpr int PADDING = 8;
+    constexpr int PADDING = 8;
 
-	QFontMetricsF metrics(qApp->font());
-	QRectF rect = metrics.boundingRect(_text);
-	rect.adjust(-PADDING, -PADDING, PADDING, PADDING);
-	rect.translate(-rect.center());
-	return rect;
+    QFontMetricsF metrics(qApp->font());
+    QRectF rect = metrics.boundingRect(_text);
+    rect.adjust(-PADDING, -PADDING, PADDING, PADDING);
+    rect.translate(-rect.center());
+    return rect;
 }
 
 int Node::roundness(double size) const
