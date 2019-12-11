@@ -14,4 +14,9 @@ void Node::addLink(Link* link)
 
 }
 
+void Node::removeLink(Link* link)
+{
+
+}
+
 } // namespace dia

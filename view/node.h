@@ -17,6 +17,7 @@ public:
 
 public:
 	void addLink(Link* link);
+	void removeLink(Link* link);
 };
 
 } // namespace dia
