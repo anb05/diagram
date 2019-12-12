@@ -1,8 +1,11 @@
 #include "node.h"
 #include "link.h"
 
+#include <QStyleOptionGraphicsItem>
 #include <QFontMetricsF>
 #include <QApplication>
+#include <QPainter>
+#include <QPen>
 
 namespace dia {
 
@@ -88,13 +91,32 @@ QRectF Node::boundingRect() const
 
 QPainterPath Node::shape() const
 {
-
+	QRectF rect = outlineRect();
+	QPainterPath path;
+	path.addRoundedRect(rect,
+						roundness(rect.width()),
+						roundness(rect.height()));
+	return path;
 }
 
-void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+
+
+void Node::paint(QPainter* painter,
+				 const QStyleOptionGraphicsItem* option,
+				 QWidget* widget)
 {
+	Q_UNUSED(widget)
 
+	QPen pen(_outlineColor);
+
+	if (option->state & QStyle::State_Selected) {
+		pen.setStyle(Qt::DotLine);
+		pen.setWidth(2);
+	}
+	painter->setPen(pen);
+	paintet->setBrush(_backgroundColor);
 }
+
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
