@@ -2,7 +2,9 @@
 #include "link.h"
 
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 #include <QFontMetricsF>
+#include <QInputDialog>
 #include <QApplication>
 #include <QPainter>
 #include <QPen>
@@ -91,41 +93,59 @@ QRectF Node::boundingRect() const
 
 QPainterPath Node::shape() const
 {
-	QRectF rect = outlineRect();
-	QPainterPath path;
-	path.addRoundedRect(rect,
-						roundness(rect.width()),
-						roundness(rect.height()));
-	return path;
+    QRectF rect = outlineRect();
+    QPainterPath path;
+    path.addRoundedRect(rect,
+                        roundness(rect.width()),
+                        roundness(rect.height()));
+    return path;
 }
 
 
 
 void Node::paint(QPainter* painter,
-				 const QStyleOptionGraphicsItem* option,
-				 QWidget* widget)
+                 const QStyleOptionGraphicsItem* option,
+                 QWidget* widget)
 {
-	Q_UNUSED(widget)
+    Q_UNUSED(widget)
 
-	QPen pen(_outlineColor);
+    QPen pen(_outlineColor);
 
-	if (option->state & QStyle::State_Selected) {
-		pen.setStyle(Qt::DotLine);
-		pen.setWidth(2);
-	}
-	painter->setPen(pen);
-	paintet->setBrush(_backgroundColor);
+    if (option->state & QStyle::State_Selected) {
+        pen.setStyle(Qt::DotLine);
+        pen.setWidth(2);
+    }
+    painter->setPen(pen);
+    painter->setBrush(_backgroundColor);
+    QRectF rect = outlineRect();
+    painter->drawRoundedRect(rect,
+                             roundness(rect.width()),
+                             roundness(rect.height()));
+    painter->setPen(_textColor);
+    painter->drawText(rect, Qt::AlignCenter, _text);
 }
 
 
 void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
-
+    QString text = QInputDialog::getText(event->widget(),
+                                         tr("Edit Text"),
+                                         tr("Enter new text: "),
+                                         QLineEdit::Normal,
+                                         _text);
+    if (!text.isEmpty()) {
+        setText(text);
+    }
 }
 
 QVariant Node::itemChange(QGraphicsItem::GraphicsItemChange changed, const QVariant& value)
 {
-
+    if (changed == ItemPositionHasChanged) {
+        foreach (Link* link, _pLinks) {
+            link->trackNodes();
+        }
+    }
+    return QGraphicsItem::itemChange(changed, value);
 }
 
 QRectF Node::outlineRect() const
@@ -141,7 +161,8 @@ QRectF Node::outlineRect() const
 
 int Node::roundness(double size) const
 {
-
+    const int DIAMETER = 12;
+    return 100 * DIAMETER / int(size);
 }
 
 } // namespace dia
