@@ -35,7 +35,7 @@ public: // OPERATORS
 
 public slots:
     void addNode();
-    void addLind();
+    void addLink();
     void del();
     void cut();
     void copy();

@@ -14,13 +14,15 @@ SOURCES += \
     main.cpp \
     mainwindow/mainwindow.cpp \
     view/link.cpp \
-    view/node.cpp
+    view/node.cpp \
+    view/propertiesdialog.cpp
 
 HEADERS += \
     app/application.h \
     mainwindow/mainwindow.h \
     view/link.h \
-    view/node.h
+    view/node.h \
+    view/propertiesdialog.hpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
